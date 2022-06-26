@@ -1,5 +1,6 @@
 package com.movsisyan.mger.repository;
 
+import com.movsisyan.mger.factory.StudentFactory;
 import com.movsisyan.mger.model.DistanceStudent;
 import com.movsisyan.mger.model.FullStudent;
 import com.movsisyan.mger.model.Student;
@@ -12,28 +13,22 @@ import java.util.*;
 public class StudentsRepository {
     private ArrayList<Student> studentList = new ArrayList<>();
 
-    private void load(String name) throws IOException {
+    private void load(String name, Map<String, StudentFactory> factoryMap) throws IOException {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(name))) {
             while (bufferedReader.ready()) {
                 String s = bufferedReader.readLine();
                 String[] split = s.split(",");
-                if (split[0].contains("full")) {
-                    FullStudent student = new FullStudent(split[0], split[1], split[2], Integer.parseInt(split[3]));
-                    String[] strings = Arrays.copyOfRange(split, 4, split.length);
-                    Integer[] grades = Arrays.stream(strings).map(Integer::parseInt).toArray(Integer[]::new);
-                    student.addGrade(grades);
-                    studentList.add(student);
-                    continue;
-                }
-                DistanceStudent students = new DistanceStudent(split[0], split[1], split[2],
-                        Integer.parseInt(split[3]), split[4]);
-                this.studentList.add(students);
+                String type = split[0];
+                StudentFactory studentFactory = factoryMap.getOrDefault(type, null);
+                Student student = studentFactory.newInstance(type, split[1], split[2],
+                        Integer.parseInt(split[3]), Arrays.copyOfRange(split, 4, split.length));
+                studentList.add(student);
             }
         }
     }
 
-    public StudentsRepository(String name) throws IOException {
-        load(name);
+    public StudentsRepository(String name,Map<String, StudentFactory> factory) throws IOException {
+        load(name, factory);
     }
 
     /**

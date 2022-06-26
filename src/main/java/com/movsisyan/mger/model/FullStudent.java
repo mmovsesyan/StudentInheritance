@@ -7,9 +7,10 @@ public class FullStudent extends Student {
     private String full;
     private ArrayList<Integer> grades = new ArrayList<>();
 
-    public FullStudent(String full, String name, String surname, int course) {
+    public FullStudent(String full, String name, String surname, int course, ArrayList<Integer> grades) {
         super(name, surname, course);
         this.full = full;
+        this.grades = grades;
     }
 
     public String getFull() {
@@ -30,8 +31,9 @@ public class FullStudent extends Student {
 
     @Override
     public String toString() {
-        return super.toString().replace(";", ", ") +
-                "number=" + grades +
+        return super.toString().replace(";", ", ") + " " +
+                "type ='" + full + '\'' +
+                ", grades=" + grades +
                 '}';
     }
 }

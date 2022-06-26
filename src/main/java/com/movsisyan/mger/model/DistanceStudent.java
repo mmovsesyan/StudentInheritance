@@ -28,8 +28,8 @@ public class DistanceStudent extends Student {
 
     @Override
     public String toString() {
-        return super.toString().replace("}", ", ") +
-                "distance='" + distance + '\'' +
+        return super.toString().replace("}", ", ") + " " +
+                "type ='" + distance + '\'' +
                 ", address='" + address + '\'' +
                 '}';
     }
